@@ -2,7 +2,6 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import SignOutButton from "@/components/SignOutButton";
-import { CryptoCountsLineChart } from "@/components/CryptoCountsLineChart";
 import { CryptoCountsChart } from "@/components/CryptoCountChart";
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
