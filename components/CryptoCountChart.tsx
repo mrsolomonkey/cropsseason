@@ -110,7 +110,7 @@ export function CryptoCountsChart() {
       {Object.entries(chartConfig).map(([key, cfg]) => (
         <Card key={key}>
           <CardHeader>
-            <CardTitle>{cfg.label} Holdings</CardTitle>
+            <CardTitle>{cfg.label} Holdings </CardTitle>
             <CardDescription>
               {cfg.label} trend over {range}
             </CardDescription>
@@ -127,11 +127,12 @@ export function CryptoCountsChart() {
                     tickMargin={8}
                     tickFormatter={(value) => value.slice(5)}
                   />
-                  <YAxis tickLine={false} axisLine={false} tickMargin={8} />
-                  <ChartTooltip
-                    cursor={false}
-                    content={<ChartTooltipContent />}
-                  />
+                  <YAxis
+                    width={typeof window !== "undefined" && window.innerWidth < 640 ? 30 : 50}
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={4}
+                    />
                   <Line
                     dataKey={key}
                     type="monotone"
