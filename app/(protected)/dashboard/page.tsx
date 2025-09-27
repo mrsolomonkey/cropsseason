@@ -12,11 +12,11 @@ export default async function DashboardPage() {
 
   return (
     <div className="p-4 sm:p-8 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold">User Dashboard</h1>
+      <h1 className="text-2xl font-bold">{session.user?.name}</h1>
       <p className="mt-2 text-gray-600">
-        Welcome back, {session.user?.name}!
+        {session.user?.email}
       </p>
-      <p className="text-sm text-gray-500">Email: {session.user?.email}</p>
+      {/* <p className="text-sm text-gray-500"></p> */}
 
       <div className="mt-6">
         <SignOutButton />

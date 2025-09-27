@@ -33,9 +33,9 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="w-full max-w-md rounded-lg border bg-white p-8 shadow">
-        <h1 className="text-2xl font-bold text-center">Welcome back</h1>
+        <h1 className="text-2xl font-bold text-center">Crop Season</h1>
         <p className="text-sm text-gray-500 text-center mb-6">
-          Login with your Google account or continue with email
+          Login with your Google account
         </p>
 
         {/* Google login */}
@@ -73,12 +73,12 @@ export default function LoginPage() {
 
         <div className="my-6 flex items-center">
           <Separator className="flex-1" />
-          <span className="px-2 text-sm text-gray-400">Or continue with</span>
+          <span className="px-2 text-sm text-gray-400">No Sign-Up for now</span>
           <Separator className="flex-1" />
         </div>
 
         {/* Email/password form (optional placeholder) */}
-        <form className="space-y-4">
+        {/* <form className="space-y-4">
           <div>
             <Label htmlFor="email">Email</Label>
             <Input
@@ -109,14 +109,14 @@ export default function LoginPage() {
           <Button type="submit" className="w-full">
             Login
           </Button>
-        </form>
+        </form> */}
 
-        <p className="mt-6 text-center text-sm text-gray-500">
+        {/* <p className="mt-6 text-center text-sm text-gray-500">
           Don’t have an account?{" "}
           <a href="/register" className="text-blue-600 hover:underline">
             Sign up
           </a>
-        </p>
+        </p> */}
       </div>
     </div>
   );
