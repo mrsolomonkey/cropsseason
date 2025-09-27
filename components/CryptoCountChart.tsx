@@ -69,9 +69,6 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function CryptoCountsChart() {
-  const [activeCoin, setActiveCoin] = useState<keyof typeof chartConfig | null>(
-    null
-  )
   const [range, setRange] = useState<"daily" | "weekly" | "monthly" | "yearly">(
     "daily"
   )
@@ -89,115 +86,74 @@ export function CryptoCountsChart() {
     }
   }
 
-  const toggleCoin = (coin: keyof typeof chartConfig) => {
-    setActiveCoin((prev) => (prev === coin ? null : coin))
-  }
+  const data = getData()
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex justify-between items-center">
-          <div>
-            <CardTitle>Coin Holdings Over Time</CardTitle>
-            <CardDescription>
-              Click a coin label to emphasize its line. Reset to show all.
-            </CardDescription>
-          </div>
-          {/* Dropdown for date filter */}
-          <select
-            value={range}
-            onChange={(e) =>
-              setRange(e.target.value as "daily" | "weekly" | "monthly" | "yearly")
-            }
-            className="border rounded px-2 py-1 text-sm"
-          >
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-            <option value="monthly">Monthly</option>
-            <option value="yearly">Yearly</option>
-          </select>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig}>
-          <ResponsiveContainer width="100%" height={350}>
-            <LineChart data={getData()} margin={{ left: 12, right: 12 }}>
-              <CartesianGrid vertical={false} />
-              <XAxis
-                dataKey="date"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                tickFormatter={(value) => value.slice(5)}
-              />
-              <YAxis tickLine={false} axisLine={false} tickMargin={8} />
-              <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+    <div className="space-y-6">
+      {/* Dropdown filter */}
+      <div className="flex justify-end">
+        <select
+          value={range}
+          onChange={(e) =>
+            setRange(e.target.value as "daily" | "weekly" | "monthly" | "yearly")
+          }
+          className="border rounded px-2 py-1 text-sm"
+        >
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+          <option value="yearly">Yearly</option>
+        </select>
+      </div>
 
-              {Object.keys(chartConfig).map((key) => {
-                const coinKey = key as keyof typeof chartConfig
-                const isActive = !activeCoin || activeCoin === coinKey
-                return (
+      {/* Render one card per coin */}
+      {Object.entries(chartConfig).map(([key, cfg]) => (
+        <Card key={key}>
+          <CardHeader>
+            <CardTitle>{cfg.label} Holdings</CardTitle>
+            <CardDescription>
+              {cfg.label} trend over {range}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={chartConfig}>
+              <ResponsiveContainer width="100%" height={250}>
+                <LineChart data={data} margin={{ left: 12, right: 12 }}>
+                  <CartesianGrid vertical={false} />
+                  <XAxis
+                    dataKey="date"
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={8}
+                    tickFormatter={(value) => value.slice(5)}
+                  />
+                  <YAxis tickLine={false} axisLine={false} tickMargin={8} />
+                  <ChartTooltip
+                    cursor={false}
+                    content={<ChartTooltipContent />}
+                  />
                   <Line
-                    key={coinKey}
-                    dataKey={coinKey}
+                    dataKey={key}
                     type="monotone"
-                    stroke={chartConfig[coinKey].color}
-                    strokeWidth={isActive ? 3 : 0}
-                    dot={isActive}
+                    stroke={cfg.color}
+                    strokeWidth={3}
+                    dot
                     connectNulls
                   >
-                    {isActive && (
-                      <LabelList
-                        dataKey={coinKey}
-                        position="top"
-                        fontSize={10}
-                      />
-                    )}
+                    <LabelList dataKey={key} position="top" fontSize={10} />
                   </Line>
-                )
-              })}
-            </LineChart>
-          </ResponsiveContainer>
-        </ChartContainer>
-
-        {/* Coin selectors */}
-        <div className="flex gap-4 mt-4 justify-center flex-wrap">
-          {Object.entries(chartConfig).map(([key, cfg]) => (
-            <button
-              key={key}
-              onClick={() => toggleCoin(key as keyof typeof chartConfig)}
-              className={`text-sm font-medium ${
-                activeCoin === key || activeCoin === null
-                  ? "text-foreground"
-                  : "text-muted-foreground"
-              }`}
-              style={{ color: cfg.color }}
-            >
-              {cfg.label}
-            </button>
-          ))}
-          {/* Reset button */}
-          <button
-            onClick={() => setActiveCoin(null)}
-            className="text-sm font-medium text-blue-600 underline"
-          >
-            Reset
-          </button>
-        </div>
-      </CardContent>
-      <CardFooter>
-        <div className="flex w-full items-start gap-2 text-sm">
-          <div className="grid gap-2">
-            <div className="flex items-center gap-2 leading-none font-medium">
-              Holdings trend visualized{" "}
+                </LineChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+          </CardContent>
+          <CardFooter>
+            <div className="flex items-center gap-2 text-sm">
               <TrendingUp className="h-4 w-4 text-green-500" />
+              <span>Showing {range} data</span>
             </div>
-            <div className="text-muted-foreground">
-              Showing {range} data
-            </div>
-          </div>
-        </div>
-      </CardFooter>
-    </Card>
+          </CardFooter>
+        </Card>
+      ))}
+    </div>
   )
 }
