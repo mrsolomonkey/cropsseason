@@ -3,6 +3,7 @@ import { redirect } from "next/navigation"
 import { authOptions } from "@/lib/auth"
 import SignOutButton from "@/components/SignOutButton"
 import { CryptoCountsChart } from "@/components/CryptoCountChart"
+import JsonInputModal from "@/components/JsonInputModal"
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
@@ -19,8 +20,10 @@ export default async function DashboardPage() {
           <h1 className="text-2xl font-bold">{session.user?.name}</h1>
           <p className="text-gray-600">{session.user?.email}</p>
         </div>
-        {/* Sign out icon always on the right */}
-        <SignOutButton />
+        <div className="flex items-center gap-2">
+          <JsonInputModal />
+          <SignOutButton />
+        </div>
       </header>
 
       {/* Unified Chart */}
